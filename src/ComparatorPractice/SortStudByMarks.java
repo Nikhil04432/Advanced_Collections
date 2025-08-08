@@ -36,6 +36,14 @@ class Student {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", marks=" + marks +
+                '}';
+    }
+
     public String getName() {
         return name;
     }
