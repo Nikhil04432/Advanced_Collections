@@ -3,6 +3,7 @@ package StreamQuestion;
 import java.nio.charset.CoderMalfunctionError;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class Employee {
     String name;
@@ -127,6 +128,179 @@ public class AdvancedStreamQuestion {
 
 
         //4️⃣ Find if any employee’s salary exceeds ₹1,00,000.
-       // 5️⃣ Sort employees by salary (descending) and then by name.
+        List<String> highSal = employees.stream()
+                .filter(n -> n.getSalary() > 100000)
+                .map(Employee::getName)
+                .toList();
+
+       // System.out.println(highSal);
+
+        // 5️⃣ Sort employees by salary (descending) and then by name.
+        List<Employee> sorted = employees.stream()
+                .sorted(Comparator.comparingDouble(Employee::getSalary).thenComparing(Employee::getName).reversed())
+                .toList();
+
+        //System.out.println(sorted);
+
+        //6️⃣ Extract all departments (unique) from the employee list.
+        Map<String, List<String>> grupedByDept = employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.mapping(Employee::getName, Collectors.toList())
+                ));
+
+        //System.out.println(grupedByDept);
+
+
+        //            7️⃣ Calculate total salary of all employees using mapToDouble() and sum().
+        OptionalDouble sumOfSalary = employees.stream()
+                .mapToDouble(n -> n.getSalary())
+                .reduce(Double::sum);
+
+        System.out.println(sumOfSalary);
+        //             8️⃣ Get the second-highest salary in the company.
+        double secondHighest = employees.stream()
+                .map(Employee::getSalary)
+                .sorted(Comparator.reverseOrder())
+                .skip(1)
+                .findFirst()
+                .orElseThrow();
+
+        System.out.println(secondHighest);
+
+
+
+        //              9️⃣ Find all employees whose names start with "N" or "R" and collect their names sorted.
+        List<Employee> sortNmae = employees.stream()
+                .filter(n -> n.getName().startsWith("N") || n.getName().startsWith("R"))
+                .sorted(Comparator.comparing(Employee::getName))
+                .collect(Collectors.toList());
+
+        // List<String> selectedNames = employees.stream()
+        //                .map(Employee::getName)
+        //                .filter(name -> name.startsWith("N") || name.startsWith("R"))
+        //                .sorted()
+        //                .toList();
+
+        System.out.println(sortNmae);
+        //               🔟 Flatten a list of companies, each containing a list of employees, into a single list of employee names.
+
+        List<String> allNmaes = companies.stream()
+                .flatMap(company -> company.employees.stream())
+                .map(Employee::getName)
+                .toList();
+
+        System.out.println(allNmaes);
     }
 }
+
+/*      Mistakes done by me :
+
+        ✅ 1. Using groupingBy() when simple filter + map was enough
+
+Your code (extra/unnecessary grouping):
+
+Map<String, List<String>> itEmployee = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.mapping(e -> e.getName().toUpperCase(), Collectors.toList())
+    ));
+
+
+Better:
+
+employees.stream()
+    .filter(e -> "IT".equals(e.getDepartment()))
+    .map(e -> e.getName().toUpperCase())
+    .toList();
+
+Mistake Summary:
+
+You introduced grouping logic where the problem only needed filtering.
+
+Why interviewers care:
+
+Choosing the simplest correct stream pipeline shows you understand what each collector is meant for.
+
+✅ 2. Wrong sorting in Question 6
+
+Your code:
+
+.sorted((a,b) -> a.length() - b.length())
+.sorted()
+
+
+The second .sorted() overrides the first sorting, losing the “sort by length” requirement.
+
+Correct:
+.sorted(Comparator.comparingInt(String::length)
+        .thenComparing(Comparator.naturalOrder()))
+
+What to remember:
+
+Use .thenComparing() for multi-level sorting, not multiple .sorted() calls.
+
+✅ 3. Using reduce(Double::sum) instead of sum()
+
+Your code:
+
+OptionalDouble sumOfSalary = employees.stream()
+        .mapToDouble(n -> n.getSalary())
+        .reduce(Double::sum);
+
+
+Better:
+
+double totalSalary = employees.stream()
+        .mapToDouble(Employee::getSalary)
+        .sum();
+
+Why avoid reduce for numeric sum?
+
+mapToDouble().sum() is clearer, faster, and optimized.
+
+Using reduce() here is considered anti-pattern in interviews.
+
+✅ 4. Getting Optional values using .get()
+
+Your code:
+
+avg.getAsDouble();
+
+
+If no employee age > 30 exists → runtime exception.
+
+Safer:
+avg.orElse(0);
+
+Interview takeaway:
+
+Always handle Optionals safely → .orElse(), .orElseThrow(), .ifPresent()
+
+✅ 5. Checking null using x -> x != null
+
+Better:
+
+.filter(Objects::nonNull)
+
+Why?
+
+Cleaner, readable, and widely recognized in interviews.
+
+✅ 6. Complex sorting reversed incorrectly
+
+Your code:
+
+.sorted(Comparator.comparingDouble(Employee::getSalary)
+        .thenComparing(Employee::getName)
+        .reversed())
+
+
+This reverses both conditions combined, which is okay only if intended.
+However, interviewers may expect explicit intent:
+
+Cleaner:
+.sorted(Comparator.comparingDouble(Employee::getSalary).reversed()
+        .thenComparing(Employee::getName))
+
+* */
