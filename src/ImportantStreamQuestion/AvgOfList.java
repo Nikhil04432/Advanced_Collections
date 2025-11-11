@@ -12,5 +12,5 @@ public class AvgOfList {
                 .orElse(0);
 
         System.out.println(avg);
-    }
+    } 
 }

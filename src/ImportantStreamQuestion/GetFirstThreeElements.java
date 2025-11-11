@@ -10,6 +10,6 @@ public class GetFirstThreeElements {
                 list.stream()
                         .limit(3)
                         .toList()
-        );
+        ); 
     }
 }

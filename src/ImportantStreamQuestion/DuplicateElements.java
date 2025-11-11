@@ -15,4 +15,4 @@ public class DuplicateElements {
 
         System.out.println(duplicate);
     }
-}
+} 

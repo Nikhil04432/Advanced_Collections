@@ -11,5 +11,5 @@ public class CheckAllEven {
                         .allMatch(n-> n %2 == 0)
         );
 
-    }
+    } 
 }

@@ -16,3 +16,4 @@ public class SumOfAllNoInList {
         System.out.println(sum);
     }
 }
+ 

@@ -12,6 +12,6 @@ public class CountEvenNumber {
                 .count();
 
         System.out.println(count);
-
+ 
     }
 }

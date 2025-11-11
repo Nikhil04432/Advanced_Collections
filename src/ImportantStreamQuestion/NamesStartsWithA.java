@@ -13,4 +13,4 @@ public class NamesStartsWithA {
         System.out.println(list);
 
     }
-}
+} 
