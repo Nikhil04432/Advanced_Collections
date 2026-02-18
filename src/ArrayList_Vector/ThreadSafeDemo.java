@@ -72,5 +72,7 @@ public class ThreadSafeDemo {
         }
 
         System.out.println(list.size());
+
+
     }
 }

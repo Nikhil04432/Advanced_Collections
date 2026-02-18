@@ -29,7 +29,7 @@ public class ComparableExample {
         list1.add(new Student("shreyas",29));
         list1.add(new Student("omie",11));
 
-        //trying to sort and exception occured                  // to see result remove implement COmparable from Student
+        //trying to sort and exception occured                  // to see result remove implement Comparable from Student
         list1.sort(null);
 
         System.out.println(list1);

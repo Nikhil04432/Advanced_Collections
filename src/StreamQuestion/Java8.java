@@ -1,3 +1,5 @@
+package StreamQuestion;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.*;
@@ -57,6 +59,7 @@ public class Java8 {
             }
         };
         printList.accept(list);
+
 
         // Supplier
         Supplier<String> giveHelloWorld = () -> "Hello World";
